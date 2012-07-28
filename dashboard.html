@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+  <title>StartX Dashboard</title>
+  <style>
+  body { min-width:0px; overflow-x: hidden; background: white; font-family: Tahoma, sans-serif; font-size: 14px; font-weight: bold; }
+  header, section, footer { display: block; }
+  #container { background-color: #3858C2; margin: 0 auto; width: 300px; border: 5px solid black; }  
+  header h1 { text-align: center; margin: 0; padding: 15px 0;}
+  label { display: block; padding-bottom: 5px; text-align: center; }
+  img { margin: 5px; border: 5px solid black; vertical-align: middle; width: 75px; height: 75px;}
+  #task { border: 1px solid #888; margin-left: 50px; width: 200px; }  
+  #tasks { margin: 20px; padding: 0; }
+  #tasks li { list-style-type: none; padding: 5px; }
+  #tasks li:nth-child(2n) { background-color: #FF6ED1; }  /* same for 2n and 2n+1  #E359A7  */
+  #tasks li:nth-child(2n+1) { background-color: #FF6ED1; }  
+  #tasks li:hover { background-color: #79E7ED; } 
+  #tasks li a { color: red; display: block; float: right; text-decoration: none; }
+  </style>
+</head>
+<body>
+	
+	<!-- Google mail -->
+	<a href="http://mail.google.com" target="_blank"><img src="http://www.aeinrst.info/wp-content/uploads/2011/09/Gmail-Icon.png" border="0"/ alt="Google Mail"/></a>
+
+
+    <!-- Google calendar -->	
+	<a href="http://www.google.com/calendar" target="_blank"><img src="http://userlogos.org/files/logos/kmc/gcal_400_300.png" border="0" alt="Google Calendar"/></a>
+
+	
+	<!-- Google docs -->
+	<a href="http://docs.google.com/" target="_blank"><img src="http://enterprisefeatures.com/wp-content/uploads/2011/01/googledocs.png" border="0" alt="Google Docs"/></a>
+	<br>
+	
+	<!-- Google spreadsheet -->
+	<a href="http://docs.google.com/spreadsheet/" target="_blank"><img src="http://icons.iconseeker.com/png/fullsize/glaze/spreadsheet.png" border="0" alt="Google Spreadsheet"/></a>
+
+	
+	<!-- Google form -->
+	<a href="https://docs.google.com/spreadsheet/gform?key=0AqDTptd-kqDSdDVwcEw2b3BTclBNeHlSRW5wOTVsWUE&hl=en" target="_blank"><img src="http://www.joeymidoro.com/img/forms-128_JOEY.png" border="0" alt="Google Form"/></a>
+
+	<!-- Yammer -->
+	<a href="http://www.yammer.com/" target="_blank"><img src="http://tabtimes.com/sites/default/files/yammer-icon.jpg" border="0" alt="Yammer"/></a>
+	
+	<!-- StartX website -->
+	<a href="http://startx.stanford.edu/" target="_blank"><img src="http://a3.twimg.com/profile_images/1488748571/startx_logo-icon.jpg" border="0" alt="StartX Website"/></a>
+	<br>
+	
+	
+	
+<div id="container">
+  <header>
+    <h1>StartX Todo</h1>
+  </header>
+  
+  <section id="main-content">
+    <div class="form-area">
+      <form id="tasks-form">
+        <label for="task">Add a task here and hit enter</label>
+        <input id="task" autofocus>
+      </form>
+    </div>
+  
+    <ul id="tasks"></ul>
+  </section>
+  
+  <footer>
+  </footer>
+</div>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+  <script type="text/javascript"> 
+    $(document).ready(function() { 
+    
+      var i = 0;
+      
+      // Initial loading of tasks
+      for( i = 0; i < localStorage.length; i++)
+        $("#tasks").append("<li id='task-"+ i +"'>" + localStorage.getItem('task-'+i) + " <a href='#'>x</a></li>");
+        
+      // Add a task
+      $("#tasks-form").submit(function() {
+        if (  $("#task").val() != "" ) {
+          localStorage.setItem( "task-"+i, $("#task").val() );
+          $("#tasks").append("<li id='task-"+i+"'>"+localStorage.getItem("task-"+i)+" <a href='#'>x</a></li>")
+          $("#task-" + i).css('display', 'none');
+          $("#task-" + i).slideDown();
+          $("#task").val("");
+          i++;
+        }
+        return false;
+      });
+      
+      // Remove a task      
+      $("#tasks li a").live("click", function() {
+        localStorage.removeItem($(this).parent().attr("id"));
+        $(this).parent().slideUp('slow', function() { $(this).remove(); } );
+        for(i=0; i<localStorage.length; i++) {
+          if( !localStorage.getItem("task-"+i)) {
+            localStorage.setItem("task-"+i, localStorage.getItem('task-' + (i+1) ) );
+            localStorage.removeItem('task-'+ (i+1) );
+          }
+        }
+      });
+    }); 
+  </script>
+
+</body>
+</html>
